@@ -2,24 +2,24 @@ var express = require('express');
 var router = express.Router();
 
 const User = require('../dispatchers/definitions/Users');
+const { getAllUsers, getUserById, registerUser } = require('../dispatchers/Users');
+const { successResponseWithData, errorResponse } = require('../dispatchers/responsers');
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
     try {
-        const users = await User.find();
-        res.json(users);
+        const result = await getAllUsers();
+        res.status(result.status).json(result);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        next(err);
     }
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
     try {
-        const { name, email, password } = req.body;
-        const newUser = new User({ name, email, password });
-        await newUser.save();
-        res.status(201).json(newUser);
+        const result = await registerUser(req.body);
+        res.status(result.status).json(result);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        next(err);
     }
 });
 
