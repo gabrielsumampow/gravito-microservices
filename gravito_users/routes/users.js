@@ -23,4 +23,13 @@ router.post('/register', async (req, res, next) => {
     }
 });
 
+router.get('/user/:id', async (req, res, next) => {
+    try {
+        const result = await getUserById(req.params.id);
+        res.status(result.status).json(result);
+    } catch (err) {
+        next(err);
+    }
+});
+
 module.exports = router;
