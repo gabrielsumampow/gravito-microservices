@@ -9,8 +9,6 @@ const {
     deleteUserHandler,
     updateUserHandler,
     changePasswordHandler,
-    requestResetPasswordHandler,
-    resetPasswordHandler
 } = require('../dispatchers/Users');
 
 router.get('/', getAllUsersHandler);
@@ -22,6 +20,5 @@ router.delete('/:id', deleteUserHandler);
 router.patch('/:id', updateUserHandler);
 
 router.post('/change-password', changePasswordHandler);
-router.post('/reset-password', requestResetPasswordHandler);
-router.post('/reset-password/:token', resetPasswordHandler);
+
 module.exports = router;

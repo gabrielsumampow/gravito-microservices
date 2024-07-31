@@ -1,12 +1,6 @@
 const bcrypt = require('bcryptjs');
 
 const {
-  errorResponse, 
-  successResponseWithData, 
-  successResponseWithoutData
-} = require('./responsers')
-
-const {
     registerUser,
     signIn,
     deleteUser,
@@ -81,22 +75,6 @@ exports.changePasswordHandler = async (req, res, next) => {
         const data = req.body;
         const response = await changePassword(data);
         res.status(response.status).json(response);
-    } catch (err){
-        next(err);
-    }
-}
-
-exports.requestResetPasswordHandler = async (req, res, next) => {
-    try {
-        
-    } catch (err){
-        next(err);
-    }
-}
-
-exports.resetPasswordHandler = async (req, res, next) => {
-    try {
-        
     } catch (err){
         next(err);
     }
