@@ -6,39 +6,43 @@ const {
   successResponseWithoutData
 } = require('./responsers')
 
-const User = require("./definitions/Users");
-const { checkEmail, getAllUsers, getUsesrById } = require("./helpers");
+const { registerUser, signIn, getAllUsers, getUserById } = require("./helpers");
 
-exports.getAllUsers = async () => {
+exports.signInHandler = async (req, res, next) => {
+    try {
+        const data = req.body;
+        const response = await signIn(data);
+        res.status(response.status).json(response);
+    } catch (err) {
+        next(err);
+    }
+}
+
+exports.registerUserHandler = async (req, res, next) => {
+    try {
+        const data = req.body;
+        const response = await registerUser(data);
+        res.status(response.status).json(response);
+    } catch (err) {
+        next(err);
+    }
+}
+
+exports.getAllUsersHandler = async (req, res, next) => {
     try {
         const users = await getAllUsers();
-        return successResponseWithData(users, "Users retrieved successfully", 200);
+        res.status(200).json(users);
     } catch (err) {
-        return errorResponse(err.message, 500);
+        next(err);
     }
-};
+}
 
-exports.getUserById = async (id) => {
+exports.getUsersByIdHandler = async (req, res, next) => {
     try {
-        const user = await getUsersById(id);
-        return successResponseWithData(user, "User with id " + id + " retrieved successfully", 200);
+        const userId = req.params.id;
+        const user = await getUserById(userId);
+        res.status(200).json(user);
     } catch (err) {
-        return errorResponse(err.message, 500);
+        next(err);
     }
-};
-
-exports.registerUser = async (data) => {
-    try {
-        const { firstname, lastname, email, phonenumber, avatar, birthdate, place, gender, status, password } = data;
-        const emailCheckResult = await checkEmail(email);
-        if (emailCheckResult) {
-            return emailCheckResult;
-        }
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ firstname, lastname, email, phonenumber, avatar, birthdate, place, gender, status, password: hashedPassword });
-        await newUser.save();
-        return successResponseWithData(newUser, 'User registered successfully', 201);
-    } catch (err) {
-        return errorResponse(err.message, 500);
-    }
-};
+}

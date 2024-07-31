@@ -2,34 +2,13 @@ var express = require('express');
 var router = express.Router();
 
 const User = require('../dispatchers/definitions/Users');
-const { getAllUsers, getUserById, registerUser } = require('../dispatchers/Users');
+const { getAllUsersHandler, getUsersByIdHandler, registerUserHandler, signInHandler } = require('../dispatchers/Users');
 const { successResponseWithData, errorResponse } = require('../dispatchers/responsers');
 
-router.get('/', async (req, res, next) => {
-    try {
-        const result = await getAllUsers();
-        res.status(result.status).json(result);
-    } catch (err) {
-        next(err);
-    }
-});
+router.get('/', getAllUsersHandler);
+router.post('/signin', signInHandler);
+router.post('/register', registerUserHandler);
 
-router.post('/register', async (req, res, next) => {
-    try {
-        const result = await registerUser(req.body);
-        res.status(result.status).json(result);
-    } catch (err) {
-        next(err);
-    }
-});
-
-router.get('/user/:id', async (req, res, next) => {
-    try {
-        const result = await getUserById(req.params.id);
-        res.status(result.status).json(result);
-    } catch (err) {
-        next(err);
-    }
-});
+router.get('/:id', getUsersByIdHandler);
 
 module.exports = router;
