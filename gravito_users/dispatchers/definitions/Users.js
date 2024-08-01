@@ -21,11 +21,9 @@ const userSchema = new Schema({
     avatar: {
         avatar_url_show: {
             type: String,
-            required: true
         },
         avatar_url_thumbnail: {
             type: String,
-            required: true
         }
     },
     birthdate: {
@@ -35,11 +33,9 @@ const userSchema = new Schema({
     place: {
         country: {
             type: String,
-            required: true
         },
         city: {
             type: String,
-            required: true
         }
     },
     gender: {
@@ -49,16 +45,17 @@ const userSchema = new Schema({
     status: {
         is_verification: {
             type: Boolean,
-            required: true
         },
         is_active: {
             type: Boolean,
-            required: true
         }
     },
     password: {
         type: String,
         required: true
+    },
+    qrCode: {
+        type: String
     },
     created_at: {
         type: Date,

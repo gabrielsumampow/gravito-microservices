@@ -2,6 +2,7 @@ const User = require('../definitions/Users');
 const { errorResponse, successResponseWithoutData, successResponseWithData } = require('../responsers');
 
 const bcrypt = require('bcryptjs');
+const QRCode = require('qrcode');
 
 exports.signIn = async (data) => {
     try {
@@ -34,6 +35,11 @@ exports.registerUser = async (data) => {
 
         const hashedPassword = await exports.hashPassword(password);
         const newUser = new User({ firstname, lastname, email, phonenumber, avatar, birthdate, place, gender, status, password: hashedPassword });
+        const qrCodeData = await exports.generateQRCode({ id: newUser._id });
+        if (qrCodeData.status !== 200) {
+            return qrCodeData;
+        }
+        newUser.qrCode = qrCodeData.data;
         await newUser.save();
 
         return successResponseWithData(newUser, 'User registered successfully', 201);
@@ -177,6 +183,15 @@ exports.hashPassword = async (password) => {
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
         return hashedPassword;
+    } catch (err) {
+        return errorResponse(err.message, 500);
+    }
+}
+
+exports.generateQRCode = async (data) => {
+    try {
+        const qrCode = await QRCode.toDataURL(JSON.stringify(data));
+        return successResponseWithData(qrCode, 'QR code generated successfully', 200);
     } catch (err) {
         return errorResponse(err.message, 500);
     }
