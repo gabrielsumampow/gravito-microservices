@@ -1,0 +1,18 @@
+{
+  "name": "gravito_restaurants",
+  "version": "1.0.0",
+  "description": "Gravito Microservices for Restaurants",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "Gabriel Sumampow",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.2"
+  }
+}
